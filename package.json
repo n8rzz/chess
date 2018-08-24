@@ -1,0 +1,49 @@
+{
+  "name": "chess",
+  "version": "1.0.0",
+  "author": "Nate Geslin <teamtomkins23@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "test": "nyc mocha -r ts-node/register -r source-map-support/register src/**/*.spec.ts",
+    "posttest": "nyc report --reporter=lcov --reporter=text-summary",
+    "start": "node ./lib/index.js"
+  },
+  "nyc": {
+    "extension": [
+      ".ts",
+      ".tsx"
+    ],
+    "exclude": [
+      "**/coverage/**",
+      "**/dist/**",
+      "**/*.d.ts",
+      "**/*.spec.ts"
+    ],
+    "all": false
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.4",
+    "@types/dotenv": "^4.0.3",
+    "@types/mocha": "^2.2.48",
+    "@types/sinon": "^2.3.7",
+    "@types/ws": "^6.0.0",
+    "browserify": "^14.4.0",
+    "chai": "^4.1.2",
+    "mocha": "^4.1.0",
+    "nyc": "^11.9.0",
+    "sinon": "^4.0.2",
+    "source-map-support": "^0.5.0",
+    "ts-node": "^3.3.0",
+    "tsify": "^3.0.3",
+    "tslint": "^5.8.0",
+    "typescript": "^2.9.2"
+  },
+  "dependencies": {
+    "@types/express": "^4.16.0",
+    "dotenv": "^6.0.0",
+    "express": "^4.16.3",
+    "pug": "^2.0.3",
+    "ws": "^6.0.0"
+  }
+}
