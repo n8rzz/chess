@@ -22,29 +22,16 @@ const wss: WebSocket.Server = new WebSocket.Server({ server });
 
 wss.on('connection', (ws: WebSocket): void => {
     console.log('connected');
+    ws.send('Connection established');
 
     ws.on('message', (message: string) => {
         console.log('received: %s', message);
 
-        const broadcastRegex = /^broadcast\:/;
-
-        if (broadcastRegex.test(message)) {
-            message = message.replace(broadcastRegex, '');
-
-            //send back the message to the other clients
-            wss.clients
-                .forEach((client: WebSocket) => {
-                    if (client !== ws) {
-                        client.send(`Hello, broadcast message -> ${message}`);
-                    }
-                });
-
-        } else {
-            ws.send(`Hello, you sent -> ${message}`);
-        }
+        //send back the message to the other clients
+        wss.clients.forEach((client: WebSocket) => {
+            client.send(`${message}`);
+        });
     });
-
-    ws.send('Hi there, I am a WebSocket server');
 });
 
 server.listen(PORT_NUMBER, () => {
