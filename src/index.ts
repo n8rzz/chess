@@ -2,6 +2,7 @@ import * as express from 'express';
 import * as http from 'http';
 import * as WebSocket from 'ws';
 import * as path from 'path';
+import * as logger from 'morgan';
 import * as dotenv from 'dotenv';
 
 dotenv.config({ path: '.env.development' });
@@ -11,6 +12,7 @@ const app = express();
 
 app.set('views', path.join(__dirname, '../views'));
 app.set('view engine', 'pug');
+app.use(logger(process.env.LOG_FORMAT));
 app.use(express.static(path.join(__dirname, '../public'), { maxAge: 31557600000 }));
 
 app.get('/', (req: express.Request, res: express.Response): void => {
@@ -21,7 +23,6 @@ const server = http.createServer(app);
 const wss: WebSocket.Server = new WebSocket.Server({ server });
 
 wss.on('connection', (ws: WebSocket): void => {
-    console.log('connected');
     ws.send('Connection established');
 
     ws.on('message', (message: string) => {
