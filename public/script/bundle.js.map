@@ -1,0 +1,17 @@
+{
+  "version": 3,
+  "sources": [
+    "node_modules/browser-pack/_prelude.js",
+    "/Users/ngeslin/Documents/www/chess/src/client/src/client/app.controller.ts",
+    "/Users/ngeslin/Documents/www/chess/src/client/src/client/app.ts"
+  ],
+  "names": [],
+  "mappings": "AAAA;;;ACAA;IAAA;IAIA,CAAC;IAHU,2BAAG,GAAV,UAAW,GAAW;QAClB,OAAO,CAAC,GAAG,CAAC,KAAK,EAAE,GAAG,CAAC,CAAC;IAC5B,CAAC;IACL,oBAAC;AAAD,CAJA,AAIC,IAAA;AAED,kBAAe,aAAa,CAAC;;;;;ACN7B,mDAA6C;AAE7C,CAAC;IACG,IAAM,aAAa,GAAkB,IAAI,wBAAa,EAAE,CAAC;IAEzD,IAAM,OAAO,GAAG,QAAQ,CAAC,sBAAsB,CAAC,gBAAgB,CAAC,CAAC,CAAC,CAAC,CAAC;IACrE,IAAM,OAAO,GAAG,QAAQ,CAAC,sBAAsB,CAAC,YAAY,CAAC,CAAC,CAAC,CAAC,CAAC;IAEjE,OAAO,CAAC,gBAAgB,CAAC,OAAO,EAAE,WAAW,CAAC,CAAC;IAE/C,qBAAqB,KAAU;QAC3B,IAAM,GAAG,GAAG,IAAI,CAAC,SAAS,CAAC,EAAE,MAAM,EAAE,CAAC,EAAE,eAAe,EAAE,CAAC,CAAC,EAAE,CAAC,CAAC,EAAE,YAAY,EAAE,CAAC,CAAC,EAAE,CAAC,CAAC,EAAE,CAAC,CAAC;QAEzF,UAAU,CAAC,IAAI,CAAC,GAAG,CAAC,CAAC;IACzB,CAAC;IAED,qBAAqB,WAAgB;QACjC,OAAO,CAAC,WAAW,GAAG,WAAW,CAAC;IACtC,CAAC;IAED,IAAM,UAAU,GAAG,IAAI,SAAS,CAAC,qBAAqB,CAAC,CAAC;IAExD,UAAU,CAAC,MAAM,GAAG,cAAO,CAAC,CAAC;IAE7B,UAAU,CAAC,OAAO,GAAG,UAAC,KAAK;QACvB,aAAa,CAAC,GAAG,CAAC,KAAG,IAAI,CAAC,SAAS,CAAC,KAAK,CAAG,CAAC,CAAC;IAClD,CAAC,CAAC;IAEF,UAAU,CAAC,SAAS,GAAG,UAAC,OAAO;QAC3B,aAAa,CAAC,GAAG,CAAC,KAAG,IAAI,CAAC,SAAS,CAAC,OAAO,CAAG,CAAC,CAAC;QAEhD,WAAW,CAAC,OAAO,CAAC,IAAI,CAAC,CAAC;IAC9B,CAAC,CAAC;AACN,CAAC,CAAC,EAAE,CAAC",
+  "file": "generated.js",
+  "sourceRoot": "",
+  "sourcesContent": [
+    "(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c=\"function\"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error(\"Cannot find module '\"+i+\"'\");throw a.code=\"MODULE_NOT_FOUND\",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u=\"function\"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()",
+    "class AppController {\n    public log(msg: string): void {\n        console.log('+++', msg);\n    }\n}\n\nexport default AppController;\n",
+    "import AppController from './app.controller';\n\n(() => {\n    const appController: AppController = new AppController();\n\n    const msgView = document.getElementsByClassName('js-messageView')[0];\n    const sendBtn = document.getElementsByClassName('js-sendBtn')[0];\n\n    sendBtn.addEventListener('click', onClickSend);\n\n    function onClickSend(event: any) {\n        const msg = JSON.stringify({ player: 1, initialPosition: [4, 4], nextPosition: [4, 3] });\n\n        connection.send(msg);\n    }\n\n    function _updateView(nextMsgView: any) {\n        msgView.textContent = nextMsgView;\n    }\n\n    const connection = new WebSocket('ws://localhost:8876');\n\n    connection.onopen = () => {};\n\n    connection.onerror = (error) => {\n        appController.log(`${JSON.stringify(error)}`);\n    };\n\n    connection.onmessage = (message) => {\n        appController.log(`${JSON.stringify(message)}`);\n\n        _updateView(message.data);\n    };\n})();\n"
+  ]
+}
