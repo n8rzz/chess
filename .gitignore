@@ -67,3 +67,6 @@ Library/
 coverage/
 dist/
 node_modules/
+
+public/style/
+public/script/
