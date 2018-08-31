@@ -1,0 +1,12 @@
+{
+  "extends": "../../baseConfig.json",
+  "compilerOptions": {
+    "outDir": "../../dist",
+  },
+  "include": [
+    "**/*.ts"
+  ],
+  "exclude": [
+    "**/*.spec.ts"
+  ]
+}
