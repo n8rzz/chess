@@ -5,8 +5,8 @@
   "license": "MIT",
   "scripts": {
     "build": "npm run build:client && npm run build:server",
-    "build:client": "browserify src/client/app.ts -p [ tsify --noImplicitAny ] > public/script/bundle.js",
-    "build:server": "tsc -p ./src/server",
+    "build:client": "browserify -d src/client/app.ts -p [ tsify --noImplicitAny ] > public/script/bundle.js",
+    "build:server": "tsc -p tsconfig.server.json",
     "test": "nyc mocha -r ts-node/register -r source-map-support/register src/**/*.spec.ts",
     "posttest": "nyc report --reporter=lcov --reporter=text-summary",
     "start": "node ./dist/index.js"
