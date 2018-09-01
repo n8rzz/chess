@@ -15,8 +15,20 @@ app.set('view engine', 'pug');
 app.use(logger(process.env.LOG_FORMAT));
 app.use(express.static(path.join(__dirname, '../public'), { maxAge: 31557600000 }));
 
+app.get('/lobby', (req: express.Request, res: express.Response): void => {
+    res.render('lobby', {
+        title: 'lobby',
+    });
+});
+app.get('/login', (req: express.Request, res: express.Response): void => {
+    res.render('login', {
+        title: 'login',
+    });
+});
 app.get('/', (req: express.Request, res: express.Response): void => {
-    res.render('home');
+    res.render('home', {
+        title: 'home'
+,    });
 });
 
 const server = http.createServer(app);
