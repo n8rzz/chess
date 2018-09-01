@@ -1,7 +1,7 @@
 import * as WebSocket from 'ws';
 import * as http from 'http';
 
-export class SocketController {
+export default class SocketController {
     public socket: WebSocket.Server = null;
 
     constructor(server: http.Server) {

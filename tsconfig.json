@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
+    "baseUrl": "./src/client",
     "declaration": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
