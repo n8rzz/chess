@@ -4,13 +4,13 @@
   "author": "Nate Geslin <teamtomkins23@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "npm run build:style && npm run build:client && npm run build:server",
-    "build:client": "browserify -d src/client/app.ts -p [ tsify --noImplicitAny ] | exorcist public/script/bundle.js.map > public/script/bundle.js",
+    "build": "sh ./scripts/build.sh",
+    "build:client": "browserify -d src/client/app.ts -p [ tsify --noImplicitAny ] | exorcist dist/public/script/bundle.js.map > dist/public/script/bundle.js",
     "build:server": "tsc -p tsconfig.server.json",
-    "build:style": "node-sass-chokidar --source-map true src/scss/ -o public/style",
+    "build:style": "node-sass-chokidar --source-map true src/scss/ -o dist/public/style",
     "test": "nyc mocha -r ts-node/register -r source-map-support/register src/client/**/*.spec.ts",
     "posttest": "nyc report --reporter=lcov --reporter=text-summary",
-    "start": "node ./dist/index.js"
+    "start": "node ./dist/server/index.js"
   },
   "nyc": {
     "extension": [

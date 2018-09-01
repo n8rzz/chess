@@ -10,7 +10,7 @@ dotenv.config({ path: '.env.development' });
 const PORT_NUMBER: string|number = process.env.PORT || 8877;
 const app = express();
 
-app.set('views', path.join(__dirname, '../views'));
+app.set('views', path.join(__dirname, '../../views'));
 app.set('view engine', 'pug');
 app.use(logger(process.env.LOG_FORMAT));
 app.use(express.static(path.join(__dirname, '../public'), { maxAge: 31557600000 }));
