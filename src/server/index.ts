@@ -7,7 +7,7 @@ import * as dotenv from 'dotenv';
 
 dotenv.config({ path: '.env.development' });
 
-const PORT_NUMBER: string|number = process.env.PORT || 8877;
+const PORT_NUMBER: string | number = process.env.PORT || 8877;
 const app = express();
 
 app.set('views', path.join(__dirname, '../../views'));
@@ -15,6 +15,15 @@ app.set('view engine', 'pug');
 app.use(logger(process.env.LOG_FORMAT));
 app.use(express.static(path.join(__dirname, '../public'), { maxAge: 31557600000 }));
 
+app.get('/game/:id', (req: express.Request, res: express.Response): void => {
+    console.log(`gameID: ${req.params.id}`);
+
+    res.render('game', {
+        title: 'game',
+        gameId: req.params.id,
+        initialState: JSON.stringify({}),
+    });
+});
 app.get('/lobby', (req: express.Request, res: express.Response): void => {
     res.render('lobby', {
         title: 'lobby',
@@ -26,8 +35,8 @@ app.get('/login', (req: express.Request, res: express.Response): void => {
     });
 });
 app.get('/', (req: express.Request, res: express.Response): void => {
-    res.render('home', {
-        title: 'home'
+    res.render('lobby', {
+        title: 'lobby'
 ,    });
 });
 
