@@ -1,3 +1,4 @@
+import StageCellCollection from './stage-cell.collection';
 import StageCellModel from './stage-cell.model';
 
 const HEIGHT: number = 8;
@@ -5,10 +6,11 @@ const WIDTH: number = 8;
 
 export default class StageViewController {
     private _element: SVGElement = null;
-    private _items: StageCellModel[] = [];
+    private _collection: StageCellCollection = null;
 
     constructor(element: SVGElement) {
         this._element = element;
+        this._collection = new StageCellCollection();
 
         return this._init()
             ._createChildren();
@@ -24,11 +26,9 @@ export default class StageViewController {
                 const stageCellModel: StageCellModel = new StageCellModel(y, x);
 
                 this._element.appendChild(stageCellModel.element);
-                this._items.push(stageCellModel);
+                this._collection.add(stageCellModel);
             }
         }
-
-        console.log('+++', this);
 
         return this;
     }
