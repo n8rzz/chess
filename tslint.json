@@ -30,6 +30,7 @@
     "no-this-assignment": [true, {"allow-destructuring": true}],
     "no-trailing-whitespace": true,
     "no-unused-expression": false,
+    "no-unused-locals": false,
     "no-var-keyword": true,
     "object-literal-shorthand": true,
     "object-literal-sort-keys": false,

@@ -5,19 +5,19 @@
     margin: auto;
 }
 
-.stage-cell {
+.stageCell {
     fill: green;
     stroke: black;
     stroke-width: 2;
 }
 
-.stage-cell:hover {
+.stageCell:hover {
     cursor: pointer;
     fill: lightslategrey;
     stroke-width: 2;
 }
 
-.stage-cell-availableMove {
+.mix-stageCell_availableMove {
     cursor: pointer;
     fill: rgba(255, 0, 255, 0.5);
     stroke: rgba(10, 10, 10, 0.2);
