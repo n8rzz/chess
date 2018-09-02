@@ -1,6 +1,7 @@
 import AppController from './app.controller';
 
 (() => {
+    const id = (new Date()).getTime();
     const appController: AppController = new AppController();
 
     const msgView = document.getElementsByClassName('js-messageView')[0];
@@ -9,7 +10,7 @@ import AppController from './app.controller';
     sendBtn.addEventListener('click', onClickSend);
 
     function onClickSend(event: any) {
-        const msg = JSON.stringify({ player: 1, initialPosition: [4, 4], nextPosition: [4, 3] });
+        const msg = JSON.stringify({ player: id, initialPosition: [4, 4], nextPosition: [4, 3] });
 
         connection.send(msg);
     }

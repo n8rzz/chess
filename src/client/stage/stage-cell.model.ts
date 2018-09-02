@@ -10,6 +10,8 @@ export const STAGE = {
     COLUMN_CELL_COUNT: 8,
 };
 const CELL_CLASSNAME = 'stageCell';
+const LIGHT_CLASSNAME = 'mix-stageCell_light';
+const DARK_CLASSNAME = 'mix-stageCell_dark';
 // const AVAILABLE_MOVE_CLASSNAME = 'mix-stageCell_availableMove';
 const SVG_NAMESPACE = 'http://www.w3.org/2000/svg';
 
@@ -30,13 +32,14 @@ export default class StageCellModel {
     public x: number = -1;
     public y: number = -1;
 
-    private _modelId = StageCellModel._count++;
+    private _modelId: number = StageCellModel._count++;
+    private _backgroundClassname: string = '';
     // private _playerId: PLAYER = PLAYER.INVALID_PLAYER;
     // private _onClickStageCellHandler: (event: UIEvent) => void;
 
     constructor(
-        x: number,
         y: number,
+        x: number,
         // player: PLAYER,
         // onClickHandler: (event: UIEvent) => void,
     ) {
@@ -47,6 +50,7 @@ export default class StageCellModel {
         this.y = y;
         // must come after `x` and `y`
         this.id = this._buildCellId();
+        this._backgroundClassname = this._buildBackgroundClassname();
         // this._playerId = player;
         // this._onClickStageCellHandler = onClickHandler;
 
@@ -143,6 +147,22 @@ export default class StageCellModel {
         return this;
     }
 
+    private _buildBackgroundClassname(): string {
+        if (this.y % 2 === 0) {
+            if (this.x % 2 === 0) {
+                return LIGHT_CLASSNAME;
+            }
+
+            return DARK_CLASSNAME;
+        }
+
+        if (this.x % 2 === 0) {
+            return DARK_CLASSNAME;
+        }
+
+        return LIGHT_CLASSNAME;
+    }
+
     private _buildCellGroupElement(): void {
         this.element = document.createElementNS(SVG_NAMESPACE, 'g');
         this.element.setAttribute('id', this.id);
@@ -157,6 +177,7 @@ export default class StageCellModel {
         this.gameCellElement.setAttributeNS(null, 'height', `${this.height}`);
         this.gameCellElement.setAttributeNS(null, 'width', `${this.width}`);
         this.gameCellElement.classList.add(CELL_CLASSNAME);
+        this.gameCellElement.classList.add(this._backgroundClassname);
     }
 
     private _buildCellId(): string {

@@ -1,20 +1,33 @@
 .stage {
-    display: block;
     max-height: 500px;
     max-width: 500px;
-    margin: auto;
 }
 
 .stageCell {
-    fill: green;
     stroke: black;
     stroke-width: 2;
 }
 
+.mix-stageCell_dark {
+    fill: black;
+}
+
+.mix-stageCell_light {
+    fill: white;
+}
+
 .stageCell:hover {
     cursor: pointer;
-    fill: lightslategrey;
+    fill: dodgerblue;
     stroke-width: 2;
+}
+
+.mix-stageCell_black {
+    fill: rgba(#111111, 0.75);
+}
+
+.mix-stageCell_white {
+    fill: rgba(#eeeeee, 0.75);
 }
 
 .mix-stageCell_availableMove {

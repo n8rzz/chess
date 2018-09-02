@@ -6,8 +6,6 @@ class AppController {
     constructor() {
         const stageElement: SVGElement = document.getElementsByClassName('js-stage')[0] as SVGElement;
         this._stageViewController = new StageViewController(stageElement);
-
-        console.log(this);
     }
 
     public log(msg: string): void {
