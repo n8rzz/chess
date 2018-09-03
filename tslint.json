@@ -15,7 +15,7 @@
     "no-any": false,
     "no-bitwise": true,
     "no-conditional-assignment": true,
-    "no-console": [true, "log"],
+    "no-console": [false, "log"],
     "no-duplicate-variable": true,
     "no-empty": false,
     "no-empty-interface": false,

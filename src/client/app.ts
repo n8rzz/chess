@@ -1,5 +1,15 @@
 import AppController from './app.controller';
 
+export enum ActionType {
+    NewConnection = 'NEW_CONNECTION',
+    ClosedConnection = 'CLOSED_CONNECTION',
+}
+
+export interface IAction {
+    type: string;
+    payload?: any;
+}
+
 (() => {
     const id = (new Date()).getTime();
     const appController: AppController = new AppController();
@@ -28,8 +38,31 @@ import AppController from './app.controller';
     };
 
     connection.onmessage = (message) => {
+        // TODO: throwaway
         appController.log(`${JSON.stringify(message)}`);
 
         _updateView(message.data);
+        // throwaway end
+
+        try {
+            const msgData: IAction = JSON.parse(message.data);
+
+            switch (msgData.type) {
+                case ActionType.NewConnection:
+                    appController.updateActivePlayerList(msgData.payload);
+
+                    break;
+                case ActionType.ClosedConnection:
+                    appController.updateActivePlayerList(msgData.payload);
+
+                    break;
+                default:
+                    throw new Error(`Unknown message type: ${msgData.type}`);
+            }
+        } catch (error) {}
+    };
+
+    connection.onclose = (close) => {
+        console.log('!!! connection closed', close);
     };
 })();

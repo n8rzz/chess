@@ -70,3 +70,5 @@ node_modules/
 
 public/style/
 public/script/
+
+.env

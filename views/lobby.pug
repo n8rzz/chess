@@ -4,10 +4,7 @@ block content
 
     div(class="stereo")
         div(class='gameList js-gameListView') game list
-        div(class='playerList js-playerListView')
-            ul
-                each user in userList
-                    li= user
+        div(class='playerList js-playerListView', data-connected-players=connectedPlayers)
 
     div(class="stereo")
         button(class="btn") create a game
