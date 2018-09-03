@@ -2,7 +2,16 @@ extends layout
 
 block content
 
-    .wrapper
-        div(class='js-messageView') This is the lobby view
-        button create a game
-        button join a game
+    div(class="stereo")
+        div(class='gameList js-gameListView') game list
+        div(class='playerList js-playerListView')
+            ul
+                each user in userList
+                    li= user
+
+    div(class="stereo")
+        button(class="btn") create a game
+        button(class="btn") join a game
+
+    div(class='js-messageView') empty
+    button(class='js-sendBtn') home view

@@ -11,7 +11,8 @@
     "test": "nyc mocha --reporter dot -r ts-node/register -r source-map-support/register -r jsdom-global/register 'src/**/*.spec.ts'",
     "posttest": "nyc report --reporter=lcov --reporter=text-summary",
     "report": "nyc report --reporter=cobertura --reporter=lcov --reporter=text-summary",
-    "start": "node ./dist/server/index.js"
+    "start": "node ./dist/server/index.js",
+    "watch:style": "node-sass-chokidar --source-map true src/scss/ -o dist/public/style ---watch"
   },
   "nyc": {
     "extension": [

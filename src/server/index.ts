@@ -4,6 +4,7 @@ import * as WebSocket from 'ws';
 import * as path from 'path';
 import * as logger from 'morgan';
 import * as dotenv from 'dotenv';
+import SocketController from './socket.controller';
 
 dotenv.config({ path: '.env.development' });
 
@@ -27,6 +28,7 @@ app.get('/game/:id', (req: express.Request, res: express.Response): void => {
 app.get('/lobby', (req: express.Request, res: express.Response): void => {
     res.render('lobby', {
         title: 'lobby',
+        userList: ['Amy Adams', 'Bob Burnquist', 'Cal Clutterbuck', 'Dayna Dallas'],
     });
 });
 app.get('/login', (req: express.Request, res: express.Response): void => {
@@ -41,16 +43,18 @@ app.get('/', (req: express.Request, res: express.Response): void => {
 });
 
 const server = http.createServer(app);
-const wss: WebSocket.Server = new WebSocket.Server({ server });
+const socketController = new SocketController(server);
 
-wss.on('connection', (ws: WebSocket): void => {
+// const wss: WebSocket.Server = new WebSocket.Server({ server });
+
+socketController.socket.on('connection', (ws: WebSocket): void => {
     ws.send('Connection established');
 
     ws.on('message', (message: string) => {
         console.log('received: %s', message);
 
         //send back the message to the other clients
-        wss.clients.forEach((client: WebSocket) => {
+        socketController.socket.clients.forEach((client: WebSocket) => {
             client.send(`${message}`);
         });
     });

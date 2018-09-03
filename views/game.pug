@@ -6,10 +6,8 @@ block content
         data-game-id=gameId,
         data-initial-state=initialState
     )
-    .wrapper
-        include partials/_stage.pug
 
-        div(class='js-messageView') empty
-        button(class='js-sendBtn') home view
+    include partials/_stage.pug
 
-    script(src='/script/bundle.js')
+    div(class='js-messageView') empty
+    button(class='js-sendBtn') home view
