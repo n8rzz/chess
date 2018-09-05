@@ -11,6 +11,7 @@ import * as dotenv from 'dotenv';
 import SocketController from './socket.controller';
 import PlayerController from './player/player.controller';
 import PlayerModel from './player/player.model';
+import {gameRouter} from './game/game.router';
 
 dotenv.config({ path: '.env' });
 
@@ -60,15 +61,8 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get('/game/:id', (req: express.Request, res: express.Response): void => {
-    console.log(`gameID: ${req.params.id}`);
+app.use('/game', gameRouter);
 
-    res.render('game', {
-        title: 'game',
-        gameId: req.params.id,
-        initialState: JSON.stringify({}),
-    });
-});
 app.get('/lobby', (req: express.Request, res: express.Response): void => {
     res.render('lobby', {
         title: 'lobby',
