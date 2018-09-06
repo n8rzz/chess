@@ -1,5 +1,6 @@
 header
     ul(class="hlist mix-hlist_left")
-        each val in ['home', 'lobby']
-            li= val
+        each val in ['lobby', 'profile', 'logout']
+            li
+                a(class="link" href=val)= val
 

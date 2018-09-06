@@ -9,7 +9,7 @@
     "lib": ["es2017", "dom"],
     "module": "commonjs",
     "moduleResolution": "node",
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noUnusedLocals": true,

@@ -35,7 +35,7 @@
     "object-literal-shorthand": true,
     "object-literal-sort-keys": false,
     "one-variable-per-declaration": [true],
-    "only-arrow-functions": [true, "allow-declarations"],
+    "only-arrow-functions": [false, "allow-declarations"],
     "ordered-imports": [false],
     "prefer-conditional-expression": [true, "check-else-if"],
     "prefer-for-of": false,

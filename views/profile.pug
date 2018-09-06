@@ -1,0 +1,14 @@
+extends layout
+
+block content
+
+    h1.hdg profile
+
+    ul
+        li= username
+        li= provider
+        li= token
+        li= rating
+        li= joinDate
+
+    a(class="link" href="profile/destroy") Delete Profile
