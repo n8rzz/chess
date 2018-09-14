@@ -55,18 +55,24 @@ app.use(sessionParser);
 app.use(logger(process.env.LOG_FORMAT));
 app.use(grant);
 app.use(express.static(path.join(__dirname, '../public'), { maxAge: 31557600000 }));
-// app.use((req, res, next) => {
-//     if (!req.session.playerId) {
-//         const playerModel: PlayerModel = PlayerController.createPlayer();
-//         req.session.playerId = playerModel.id;
-//     } else if (!PlayerController.hasPlayer(req.session.playerId)) {
-//         console.log(`::: PlayerId: ${req.session.playerId} found in current session`);
+app.use((req, res, next) => {
+    // if (!req.session.playerId) {
+    //     const playerModel: PlayerModel = PlayerController.createPlayer();
+    //     req.session.playerId = playerModel.id;
 
-//         PlayerController.createPlayerWithId(req.session.playerId);
-//     }
+    // } else if (!PlayerController.hasPlayer(req.session.playerId)) {
+    //     console.log(`::: PlayerId: ${req.session.playerId} found in current session`);
+
+    //     PlayerController.createPlayerWithId(req.session.playerId);
+    // }
 
 //     next();
-// });
+
+    console.log('---', req.session);
+    console.log('???', PlayerController);
+
+    next();
+});
 
 app.use('/', AuthRouteController);
 app.use('/profile', [hasAuthMiddleware], UserRouteController);

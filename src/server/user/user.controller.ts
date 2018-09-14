@@ -1,38 +1,41 @@
 import * as express from 'express';
 import * as util from 'util';
+import * as u4 from 'uuid';
 import {UserModel} from './models/user.model';
 import {IUser} from './models/i-user';
+import PlayerController from '../player/player.controller';
 
 function getProfileList(req: express.Request, res: express.Response): void {
     console.log('+++ getProfileList');
 }
 
 function getProfile(req: express.Request, res: express.Response): void {
-    UserModel.findOne({ email: req.session.email }, (error: any, userModel: IUser): void => {
-        if (error) {
+    UserModel.findOne({ email: req.session.email })
+        .then((userModel: IUser): void => {
+            res.render('profile', {
+                title: 'Profile',
+                username: req.session.username,
+                provider: req.session.provider,
+                token: req.session.token,
+                rating: userModel.rating,
+                joinDate: userModel.joinDate,
+            });
+        })
+        .catch((error: any): void => {
             throw error;
-        }
-
-        res.render('profile', {
-            title: 'Profile',
-            username: req.session.username,
-            provider: req.session.provider,
-            token: req.session.token,
-            rating: userModel.rating,
-            joinDate: userModel.joinDate,
         });
-    });
 }
 
 function createProfile(req: express.Request): void {
-    UserModel.create({
-        username: req.session.username,
-        email: req.session.email,
-    }, (error: any, document: IUser): void => {
-        if (error) {
+    UserModel.create({ email: req.session.email, playerId: u4() })
+        .then((userModel: IUser): void => {
+            PlayerController.createPlayerWithId(userModel.playerId);
+        })
+        .catch((error: any): void => {
             console.error(`Error: something went wrong attempting to create a profile. ${util.inspect(error)}`);
-        }
-    });
+
+            throw error;
+        });
 }
 
 function updateProfile(req: express.Request, res: express.Response): void {
@@ -40,25 +43,25 @@ function updateProfile(req: express.Request, res: express.Response): void {
 }
 
 function destroyProfile(req: express.Request, res: express.Response): void {
-    UserModel.findOneAndRemove({ email: req.session.email }, (error: any, userModel: IUser): void => {
-        if (error) {
+    UserModel.findOneAndRemove({ email: req.session.email })
+        .then((userModel: IUser): void => { })
+        .catch((error: any): void => {
             throw error;
-        }
-    });
+        });
 }
 
 function createOrLoadUserProfile(req: express.Request): void {
-    UserModel.findOne({ email: req.session.email }, (error: any, user): void => {
-        if (error) {
+    UserModel.findOne({ email: req.session.email })
+        .then((user): void => {
+            if (!user) {
+                createProfile(req);
+
+                return;
+            }
+        })
+        .catch((error: any): void => {
             throw error;
-        }
-
-        if (!user) {
-            createProfile(req);
-
-            return;
-        }
-    });
+        });
 }
 
 export const userController = {
