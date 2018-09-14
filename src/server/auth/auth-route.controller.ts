@@ -1,10 +1,32 @@
 import * as express from 'express';
-import { authController } from './auth.controller';
+import * as passport from 'passport';
+
 const router: express.Router = express.Router();
 
-router.get('/login', authController.login);
-router.get('/logout', authController.logout);
-router.get('/handle_github_callback', authController.onAuthSuccessGithub);
-router.get('/handle_google_callback', authController.onAuthSuccessGoogle);
+router.get('/auth/google', passport.authenticate('google', {
+    scope: [
+        'https://www.googleapis.com/auth/userinfo.profile',
+        'https://www.googleapis.com/auth/userinfo.email',
+    ],
+}));
+
+router.get('/auth/google/callback',
+    passport.authenticate('google', { failureRedirect: '/login' }),
+    (req: express.Request, res: express.Response): void => {
+        req.session.token = req.user.token;
+
+        res.redirect('/lobby');
+    });
+
+router.get('/auth/github', passport.authenticate('github'));
+
+router.get(
+    '/auth/github/callback',
+    passport.authenticate('github', { failureRedirect: '/login' }),
+    (req: express.Request, res: express.Response): void => {
+        req.session.token = req.user.token;
+
+        res.redirect('/lobby');
+    });
 
 export const AuthRouteController = router;

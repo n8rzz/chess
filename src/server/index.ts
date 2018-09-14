@@ -6,22 +6,18 @@ import * as bodyParser from 'body-parser';
 import * as mongo from 'connect-mongo';
 import * as mongoose from 'mongoose';
 import * as path from 'path';
+import * as passport from 'passport';
 import * as logger from 'morgan';
 import * as dotenv from 'dotenv';
-import * as Grant from 'grant-express';
 import SocketController from './socket.controller';
-import PlayerController from './player/player.controller';
-// import PlayerModel from './player/player.model';
 import {AuthRouteController} from './auth/auth-route.controller';
-import {UserRouteController} from './user/user-route.controller';
-import {grantConfig} from './config/grant.config';
+import {passportConfigurator} from './auth/passport-configurator';
 import {hasAuthMiddleware} from './auth/has-auth.middleware';
 
 dotenv.config({ path: '.env' });
 
 const PORT_NUMBER: string | number = process.env.PORT || 8877;
 
-const grant: any = new Grant(grantConfig[process.env.NODE_ENV]);
 const app = express();
 const MongoStore = mongo(session);
 const mongoUrl = process.env.MONGODB_URI;
@@ -46,36 +42,31 @@ const sessionParser = session({
     }),
 });
 
+passportConfigurator(passport);
+
 app.set('views', path.join(__dirname, '../../views'));
 app.set('view engine', 'pug');
+app.use(passport.initialize());
+// app.use(passport.session());
 app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(sessionParser);
 app.use(logger(process.env.LOG_FORMAT));
-app.use(grant);
 app.use(express.static(path.join(__dirname, '../public'), { maxAge: 31557600000 }));
-app.use((req, res, next) => {
-    // if (!req.session.playerId) {
-    //     const playerModel: PlayerModel = PlayerController.createPlayer();
-    //     req.session.playerId = playerModel.id;
+app.use('/', AuthRouteController);
 
-    // } else if (!PlayerController.hasPlayer(req.session.playerId)) {
-    //     console.log(`::: PlayerId: ${req.session.playerId} found in current session`);
-
-    //     PlayerController.createPlayerWithId(req.session.playerId);
-    // }
-
-//     next();
-
-    console.log('---', req.session);
-    console.log('???', PlayerController);
-
-    next();
+app.get('/login', (req: express.Request, res: express.Response): void => {
+    res.render('login', {
+        title: 'login',
+    });
 });
 
-app.use('/', AuthRouteController);
-app.use('/profile', [hasAuthMiddleware], UserRouteController);
+app.get('/logout', (req: express.Request, res: express.Response): void => {
+    req.session.destroy((err: any): void => { throw err; });
+
+    res.redirect('/login');
+});
 
 app.get('/game/:id', [hasAuthMiddleware], (req: express.Request, res: express.Response): void => {
     console.log(`gameID: ${req.params.id}`);
@@ -90,15 +81,21 @@ app.get('/game/:id', [hasAuthMiddleware], (req: express.Request, res: express.Re
 app.get('/lobby', [hasAuthMiddleware], (req: express.Request, res: express.Response): void => {
     res.render('lobby', {
         title: 'lobby',
-        connectedPlayers: JSON.stringify({ connectedPlayers: PlayerController.connectedPlayers }),
+        connectedPlayers: JSON.stringify({ connectedPlayers: [] }),
     });
 });
 
-app.get('/', [hasAuthMiddleware], (req: express.Request, res: express.Response): void => {
-    res.render('lobby', {
-        title: 'lobby',
+app.get('/', (req: express.Request, res: express.Response): void => {
+    res.render('login', {
+        title: 'login',
     });
 });
+
+// app.get('/', [hasAuthMiddleware], (req: express.Request, res: express.Response): void => {
+//     res.render('lobby', {
+//         title: 'lobby',
+//     });
+// });
 
 const server = http.createServer(app);
 const socketController: SocketController = new SocketController(server, sessionParser);
