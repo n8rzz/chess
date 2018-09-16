@@ -88,7 +88,6 @@ export function passportConfigurator(passport: Passport.PassportStatic): void {
         next(null, user);
     });
 
-
     passport.use(googleAuthStrategy);
     passport.use(githubAuthStrategy);
 }

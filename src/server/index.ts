@@ -13,6 +13,8 @@ import SocketController from './socket.controller';
 import {AuthRouteController} from './auth/auth-route.controller';
 import {passportConfigurator} from './auth/passport-configurator';
 import {hasAuthMiddleware} from './auth/has-auth.middleware';
+import {RoutePathEnum} from './config/route-path.enum';
+import {ProfileRouteController} from './profile/profile-route.controller';
 
 dotenv.config({ path: '.env' });
 
@@ -48,28 +50,18 @@ passportConfigurator(passport);
 app.set('views', path.join(__dirname, '../../views'));
 app.set('view engine', 'pug');
 app.use(passport.initialize());
-// app.use(passport.session());
+app.use(passport.session());
 app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(sessionParser);
 app.use(logger(process.env.LOG_FORMAT));
 app.use(express.static(path.join(__dirname, '../public'), { maxAge: 31557600000 }));
-app.use('/', AuthRouteController);
 
-app.get('/login', (req: express.Request, res: express.Response): void => {
-    res.render('login', {
-        title: 'login',
-    });
-});
+app.use(RoutePathEnum.Root, AuthRouteController);
+app.use(RoutePathEnum.Profile, ProfileRouteController);
 
-app.get('/logout', (req: express.Request, res: express.Response): void => {
-    req.session.destroy((err: any): void => { throw err; });
-
-    res.redirect('/login');
-});
-
-app.get('/game/:id', [hasAuthMiddleware], (req: express.Request, res: express.Response): void => {
+app.get(RoutePathEnum.GameSingle, [hasAuthMiddleware], (req: express.Request, res: express.Response): void => {
     console.log(`gameID: ${req.params.id}`);
 
     res.render('game', {
@@ -79,24 +71,18 @@ app.get('/game/:id', [hasAuthMiddleware], (req: express.Request, res: express.Re
     });
 });
 
-app.get('/lobby', [hasAuthMiddleware], (req: express.Request, res: express.Response): void => {
+app.get(RoutePathEnum.Lobby, [hasAuthMiddleware], (req: express.Request, res: express.Response): void => {
     res.render('lobby', {
         title: 'lobby',
         connectedPlayers: JSON.stringify({ connectedPlayers: [] }),
     });
 });
 
-app.get('/', (req: express.Request, res: express.Response): void => {
-    res.render('login', {
-        title: 'login',
+app.get(RoutePathEnum.Root, [hasAuthMiddleware], (req: express.Request, res: express.Response): void => {
+    res.render('lobby', {
+        title: 'lobby',
     });
 });
-
-// app.get('/', [hasAuthMiddleware], (req: express.Request, res: express.Response): void => {
-//     res.render('lobby', {
-//         title: 'lobby',
-//     });
-// });
 
 const server = http.createServer(app);
 const socketController: SocketController = new SocketController(server, sessionParser);
