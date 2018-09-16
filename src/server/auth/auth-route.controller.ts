@@ -14,6 +14,7 @@ router.get('/auth/google/callback',
     passport.authenticate('google', { failureRedirect: '/login' }),
     (req: express.Request, res: express.Response): void => {
         req.session.token = req.user.token;
+        req.session.playerId = req.user.playerId;
 
         res.redirect('/lobby');
     });
@@ -25,6 +26,7 @@ router.get(
     passport.authenticate('github', { failureRedirect: '/login' }),
     (req: express.Request, res: express.Response): void => {
         req.session.token = req.user.token;
+        req.session.playerId = req.user.playerId;
 
         res.redirect('/lobby');
     });
