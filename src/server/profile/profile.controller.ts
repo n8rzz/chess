@@ -1,8 +1,8 @@
 import * as express from 'express';
 import * as util from 'util';
 import * as u4 from 'uuid';
-import {UserModel} from './models/user.model';
-import {IUser} from './models/i-user';
+import {UserModel} from '../user/models/user.model';
+import {IUser} from '../user/models/i-user';
 import PlayerController from '../player/player.controller';
 
 function getProfileList(req: express.Request, res: express.Response): void {
@@ -10,12 +10,13 @@ function getProfileList(req: express.Request, res: express.Response): void {
 }
 
 function getProfile(req: express.Request, res: express.Response): void {
-    UserModel.findOne({ email: req.session.email })
+    UserModel.findOne({ playerId: req.session.playerId })
         .then((userModel: IUser): void => {
             res.render('profile', {
                 title: 'Profile',
-                username: req.session.username,
-                provider: req.session.provider,
+                avatarUrl: userModel.avatarUrl,
+                email: userModel.email,
+                provider: userModel.provider,
                 token: req.session.token,
                 rating: userModel.rating,
                 joinDate: userModel.joinDate,
@@ -64,7 +65,7 @@ function createOrLoadUserProfile(req: express.Request): void {
         });
 }
 
-export const userController = {
+export const ProfileController = {
     getProfileList,
     getProfile,
     createProfile,
