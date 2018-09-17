@@ -25,12 +25,10 @@ export default class SocketController {
     constructor(server: http.Server, sessionParser: any) {
         this._websocketServer = new WebSocket.Server({
             verifyClient: (info: any, done: any) => {
-                console.log('::: Parsing session');
-
                 sessionParser(info.req, {} as any, () => {
-                    console.log('::: Session parsed for: %s', info.req.session.playerId);
+                    console.log('::: Session parsed for: %s', info.req.session.id);
 
-                    done(info.req.session.playerId);
+                    done(info.req.session.id);
                 });
             },
             clientTracking: true,
@@ -40,7 +38,7 @@ export default class SocketController {
 
     public init(): void {
         this._websocketServer.on('connection', (ws: WebSocket, req: express.Request): void => {
-            console.log('::: Connection established: %s', req.session.playerId);
+            console.log('::: Connection established: %s', req.session.id);
 
             ws.send('Connection established');
 
@@ -51,7 +49,7 @@ export default class SocketController {
             this._onUpdateClientsHandler(msg);
 
             ws.on('message', this._onMessageHandler);
-            ws.on('close', () => this._onCloseHandler(req.session.playerId));
+            ws.on('close', () => this._onCloseHandler(req.session.id));
         });
     }
 

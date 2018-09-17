@@ -83,6 +83,7 @@ app.get(RoutePathEnum.GameSingle, [hasAuthMiddleware], (req: express.Request, re
 app.get(RoutePathEnum.Lobby, [hasAuthMiddleware], (req: express.Request, res: express.Response): void => {
     res.render('lobby', {
         title: 'lobby',
+        playerId: req.session.playerId,
         connectedPlayers: JSON.stringify({ connectedPlayers: [] }),
     });
 });
@@ -90,6 +91,7 @@ app.get(RoutePathEnum.Lobby, [hasAuthMiddleware], (req: express.Request, res: ex
 app.get(RoutePathEnum.Root, [hasAuthMiddleware], (req: express.Request, res: express.Response): void => {
     res.render('lobby', {
         title: 'lobby',
+        playerId: req.session.playerId,
         connectedPlayers: JSON.stringify({ connectedPlayers: [] }),
     });
 });

@@ -14,13 +14,15 @@ export interface IAction {
     const id = (new Date()).getTime();
     const appController: AppController = new AppController();
 
-    const msgView = document.getElementsByClassName('js-messageView')[0];
-    const sendBtn = document.getElementsByClassName('js-sendBtn')[0];
+    const playerIdElement: HTMLElement = document.getElementsByClassName('js-playerId')[0] as HTMLElement;
+    const playerId: string = playerIdElement.dataset.playerId;
+    const msgView: HTMLElement = document.getElementsByClassName('js-messageView')[0] as HTMLElement;
+    const sendBtn: HTMLElement = document.getElementsByClassName('js-sendBtn')[0] as HTMLElement;
 
     sendBtn.addEventListener('click', onClickSend);
 
     function onClickSend(event: any) {
-        const msg = JSON.stringify({ player: id, initialPosition: [4, 4], nextPosition: [4, 3] });
+        const msg = JSON.stringify({ player: playerId, initialPosition: [4, 4], nextPosition: [4, 3] });
 
         connection.send(msg);
     }
@@ -31,7 +33,9 @@ export interface IAction {
 
     const connection = new WebSocket('ws://localhost:8876');
 
-    connection.onopen = () => {};
+    connection.onopen = () => {
+        console.log('+++', playerId);
+    };
 
     connection.onerror = (error) => {
         appController.log(`${JSON.stringify(error)}`);
