@@ -12,12 +12,8 @@ class PlayerController {
         this._collection = new PlayerCollection();
     }
 
-    public createPlayer(): PlayerModel {
-        return this._createPlayer();
-    }
-
-    public createPlayerWithId(id: string): void {
-        this._createPlayer(id);
+    public createPlayer(id: string, email: string, sessionId?: string): void {
+        this._createPlayer(id, email, sessionId);
     }
 
     public hasPlayer(id: string): PlayerModel {
@@ -32,12 +28,14 @@ class PlayerController {
         this._collection.reset();
     }
 
-    private _createPlayer(id?: string): PlayerModel {
-        const player: PlayerModel = new PlayerModel(id);
+    private _createPlayer(id: string, email: string, sessionId?: string): void {
+        if (this.hasPlayer(id)) {
+            return;
+        }
+
+        const player: PlayerModel = new PlayerModel(id, email, sessionId);
 
         this._collection.add(player);
-
-        return player;
     }
 }
 

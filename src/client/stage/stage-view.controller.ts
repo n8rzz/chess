@@ -9,6 +9,10 @@ export default class StageViewController {
     private _collection: StageCellCollection = null;
 
     constructor(element: SVGElement) {
+        if (typeof element === 'undefined') {
+            return;
+        }
+
         this._element = element;
         this._collection = new StageCellCollection();
 

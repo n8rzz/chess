@@ -8,20 +8,30 @@ describe('PlayerController', () => {
     });
 
     describe('.createPlayer()', () => {
-        it('creates a PlayerModel', () => {
-            const model: PlayerModel = PlayerController.createPlayer();
+        describe('when player does not already exist', () => {
+            it('creates a PlayerModel', () => {
+                const idMock: string = 'a1b2c3d4e5';
+                const emailMock: string = 'apowers@mod.gov';
+                const sessionIdMock: string = 'a1b2c3d4e5';
 
-            expect(model).to.not.be.null;
+                PlayerController.createPlayer(idMock, emailMock, sessionIdMock);
+
+                expect(PlayerController.connectedPlayers[0]).to.equal(idMock);
+            });
         });
-    });
 
-    describe('.createPlayerWithId()', () => {
-        it('creates a PlayerModel with a provided ID', () => {
-            const idMock: string = 'a1b2c3d4e5';
+        describe('when player already exists', () => {
+            it('does not create a PlayerModel', () => {
+                const idMock: string = 'a1b2c3d4e5';
+                const emailMock: string = 'apowers@mod.gov';
+                const sessionIdMock: string = 'a1b2c3d4e5';
 
-            PlayerController.createPlayerWithId(idMock);
+                PlayerController.createPlayer(idMock, emailMock, sessionIdMock);
+                PlayerController.createPlayer(idMock, emailMock, sessionIdMock);
 
-            expect(PlayerController.connectedPlayers[0]).to.equal(idMock);
+                expect(PlayerController.connectedPlayers[0]).to.equal(idMock);
+                expect(PlayerController.connectedPlayers[1]).to.equal(undefined);
+            });
         });
     });
 });

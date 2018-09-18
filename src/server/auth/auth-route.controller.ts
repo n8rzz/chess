@@ -10,7 +10,7 @@ function _onCallbackHandler(req: express.Request, res: express.Response): void {
     req.session.playerId = req.user.profile.playerId;
 
     // TODO: remove, this is only temporary
-    PlayerController.createPlayerWithId(req.user.profile.playerId);
+    PlayerController.createPlayer(req.user.profile.playerId, req.user.profile.email);
 
     res.redirect('/lobby');
 }
@@ -22,6 +22,8 @@ router.get(RoutePathEnum.Login, (req: express.Request, res: express.Response): v
 });
 
 router.get(RoutePathEnum.Logout, (req: express.Request, res: express.Response): void => {
+    PlayerController.removePlayer(req.session.playerId);
+
     req.session.destroy((err: any): void => { throw err; });
 
     res.redirect('/login');

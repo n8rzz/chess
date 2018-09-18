@@ -10,6 +10,7 @@ import * as passport from 'passport';
 import * as logger from 'morgan';
 import * as dotenv from 'dotenv';
 import SocketController from './socket.controller';
+import PlayerController from './player/player.controller';
 import {AuthRouteController} from './auth/auth-route.controller';
 import {passportConfigurator} from './auth/passport-configurator';
 import {hasAuthMiddleware} from './auth/has-auth.middleware';
@@ -58,9 +59,12 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(logger(process.env.LOG_FORMAT));
 app.use((req: express.Request, res: express.Response, next: express.NextFunction): void => {
-    if (!req.session.token || !req.session.playerId) {
+    if (!req.session.playerId || PlayerController.hasPlayer(req.session.playerId)) {
         return next();
     }
+
+    console.log('???', req.session.playerId, req.session.passport.email, req.session.id);
+    PlayerController.createPlayer(req.session.playerId, req.session.passport.email, req.session.id);
 
     next();
 });
@@ -89,11 +93,7 @@ app.get(RoutePathEnum.Lobby, [hasAuthMiddleware], (req: express.Request, res: ex
 });
 
 app.get(RoutePathEnum.Root, [hasAuthMiddleware], (req: express.Request, res: express.Response): void => {
-    res.render('lobby', {
-        title: 'lobby',
-        playerId: req.session.playerId,
-        connectedPlayers: JSON.stringify({ connectedPlayers: [] }),
-    });
+    res.redirect('lobby');
 });
 
 const server = http.createServer(app);
