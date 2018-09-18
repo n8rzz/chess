@@ -18,7 +18,6 @@ export interface IAction {
 }
 
 export default class SocketController {
-    private _sessionId: string = null;
     private _websocketServer: WebSocket.Server = null;
     private _onMessageHandler: (msg: string) => void = this._onMessage.bind(this);
     private _onCloseHandler: (playerId: string) => void = this._onClose.bind(this);
@@ -29,8 +28,6 @@ export default class SocketController {
             verifyClient: (info: any, done: any) => {
                 sessionParser(info.req, {} as any, () => {
                     console.log('::: Session parsed for: %s', info.req.session.id);
-
-                    this._sessionId = info.req.session.id;
 
                     done(info.req.session.id);
                 });

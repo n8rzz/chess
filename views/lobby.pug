@@ -3,6 +3,7 @@ extends layout
 block content
 
     div(class="u-isVisuallyHidden js-playerId", data-player-id=playerId)
+    div= connectedPlayers
     div(class="stereo")
         div(class='gameList js-gameListView') game list
         div(class='playerList js-playerListView', data-connected-players=connectedPlayers)

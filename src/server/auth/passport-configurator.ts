@@ -1,3 +1,4 @@
+import * as util from 'util';
 import * as Passport from 'passport';
 import * as GoogleStrategy from 'passport-google-oauth20';
 import * as GithubStrategy from 'passport-github';
@@ -81,11 +82,23 @@ export function passportConfigurator(passport: Passport.PassportStatic): void {
     );
 
     passport.serializeUser((user: any, next: (err: any, id?: {}) => void): void => {
+        console.log('!!! passport.serializeUser - ', util.inspect(user));
+
         next(null, user);
     });
 
     passport.deserializeUser((user: any, next: (err: any, id?: {}) => void): void => {
-        next(null, user);
+        UserModel.findOne({ playerId: user.profile.playerId })
+            .then((userModel: IUser): void => {
+                console.log('!!! passport.deserializeUser - ', userModel.playerId);
+
+                next(null, userModel);
+            })
+            .catch((err: any): void => {
+                next(null, false);
+
+                throw err;
+            });
     });
 
     passport.use(googleAuthStrategy);

@@ -39,8 +39,8 @@ export default class AppController {
         console.log('+++', msg);
     }
 
-    public updateActivePlayerList(activePlayerList: string[]): void {
-        const playerList: string[] = activePlayerList;
+    public updateActivePlayerList(activePlayerList: any[]): void {
+        const playerList: any[] = activePlayerList;
 
         this._playerListController.updateActivePlayerList(playerList);
     }

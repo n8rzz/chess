@@ -3,8 +3,12 @@ import PlayerModel from './player.model';
 export default class PlayerCollection {
     private _items: PlayerModel[] = [];
 
-    get playerIdList(): string[] {
-        return this._items.map((item: PlayerModel): string => item.id);
+    // FIXME: return models, no abstractions needed
+    get playerList(): any[] {
+        return this._items.map((item: PlayerModel): any => ({
+            email: item.email,
+            playerId: item.id,
+        }));
     }
 
     get length(): number {

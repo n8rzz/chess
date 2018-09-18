@@ -5,7 +5,7 @@ class PlayerController {
     private _collection: PlayerCollection = null;
 
     get connectedPlayers(): string[] {
-        return this._collection.playerIdList;
+        return this._collection.playerList;
     }
 
     constructor() {

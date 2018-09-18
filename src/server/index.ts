@@ -63,8 +63,8 @@ app.use((req: express.Request, res: express.Response, next: express.NextFunction
         return next();
     }
 
-    console.log('???', req.session.playerId, req.session.passport.email, req.session.id);
-    PlayerController.createPlayer(req.session.playerId, req.session.passport.email, req.session.id);
+    console.log('!!! adding re-visiting user to Playerlist',  req.session.id, req.session.playerId, req.session.passport.email);
+    PlayerController.createPlayer(req.session.playerId, req.session.passport.user.profile.email, req.session.id);
 
     next();
 });
@@ -88,7 +88,7 @@ app.get(RoutePathEnum.Lobby, [hasAuthMiddleware], (req: express.Request, res: ex
     res.render('lobby', {
         title: 'lobby',
         playerId: req.session.playerId,
-        connectedPlayers: JSON.stringify({ connectedPlayers: [] }),
+        connectedPlayers: JSON.stringify({ connectedPlayers: PlayerController.connectedPlayers }),
     });
 });
 

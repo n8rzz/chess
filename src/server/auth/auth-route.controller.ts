@@ -8,8 +8,8 @@ const router: express.Router = express.Router();
 function _onCallbackHandler(req: express.Request, res: express.Response): void {
     req.session.token = req.user.token;
     req.session.playerId = req.user.profile.playerId;
+    req.session.email = req.user.profile.email;
 
-    // TODO: remove, this is only temporary
     PlayerController.createPlayer(req.user.profile.playerId, req.user.profile.email);
 
     res.redirect('/lobby');

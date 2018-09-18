@@ -1,11 +1,17 @@
 export interface IConnectedPlayers {
-    connectedPlayers: string[];
+    connectedPlayers: IPlayer[];
+}
+
+// FIXME: abstract to shared
+export interface IPlayer {
+    email: string;
+    playerId: string;
 }
 
 export default class PlayerListViewController {
     private _element: HTMLElement = null;
     private _playerListElement: HTMLUListElement = null;
-    private _activePlayerList: string[] = [];
+    private _activePlayerList: IPlayer[] = [];
 
     constructor(element: HTMLElement) {
         if (!element) {
@@ -20,7 +26,7 @@ export default class PlayerListViewController {
             ._createChildren();
     }
 
-    public updateActivePlayerList(activePlayerList: string[]): void {
+    public updateActivePlayerList(activePlayerList: IPlayer[]): void {
         this._activePlayerList = activePlayerList;
 
         this._destroyPlayerListElement();
@@ -50,7 +56,7 @@ export default class PlayerListViewController {
         }
 
         for (let i = 0; i < this._activePlayerList.length; i++) {
-            const player: string = this._activePlayerList[i];
+            const player: string = this._activePlayerList[i].email;
             const listItemElement: HTMLLIElement = document.createElement('li');
             listItemElement.textContent = player;
 
