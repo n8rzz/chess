@@ -1,3 +1,4 @@
+import EventBus from '../shared/event-bus/event-bus';
 import SocketService from './socket.service';
 import PlayerListViewController from './playerList/player-list-view.controller';
 import StageViewController from './stage/stage-view.controller';
@@ -5,6 +6,8 @@ import StageViewController from './stage/stage-view.controller';
 export default class AppController {
     public socketService: SocketService = null;
 
+    protected eventBus: EventBus = null;
+    // FIXME: move below handlers to EventBus
     protected onUpdatePlayerListHandler: (playerList: string[]) => void = this.updateActivePlayerList.bind(this);
     protected onUpdateViewHandler: (msg: string) => void = this.updateView.bind(this);
 
@@ -24,7 +27,8 @@ export default class AppController {
     }
 
     constructor() {
-        this.socketService = new SocketService(this.onUpdateViewHandler, this.onUpdatePlayerListHandler);
+        this.eventBus = new EventBus();
+        this.socketService = new SocketService(this.eventBus, this.onUpdateViewHandler, this.onUpdatePlayerListHandler);
 
         return this._init()
             ._createChildren()
@@ -84,6 +88,8 @@ export default class AppController {
         }
 
         this.socketService.setupConnection(this.playerId);
+        this.eventBus.on('Message', this.onUpdateViewHandler);
+        this.eventBus.on('UpdatePlayerList', this.onUpdatePlayerListHandler);
         this._sendBtnElement.addEventListener('click', this._onClickSendHandler);
 
         return this;

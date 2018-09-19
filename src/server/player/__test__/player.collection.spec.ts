@@ -12,8 +12,9 @@ describe('PlayerCollection', () => {
         });
 
         it('does not throw when passed a valid playerId', () => {
-            const playerModel: PlayerModel = new PlayerModel();
+            const playerModel: PlayerModel = new PlayerModel(null, null, null);
             const collection: PlayerCollection = new PlayerCollection();
+
             collection.add(playerModel);
 
             expect(() => collection.removePlayerById(playerModel.id)).to.not.throw();
