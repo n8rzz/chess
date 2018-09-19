@@ -1,3 +1,5 @@
+import EventBus from '../shared/event-bus/event-bus';
+
 const SOCKET_PORT: number = 8876;
 const SOCKET_URI: string = `ws://localhost:${SOCKET_PORT}`;
 
@@ -14,12 +16,18 @@ export interface IAction {
 
 export default class SocketService {
     private _connection: WebSocket = null;
+    private _eventBus: EventBus = null;
     private _isEnabled: boolean = false;
     private _playerId: string = null;
     private _onUpdateActivePlayerList: (playerList: string[]) => void = null;
     private _onUpdateView: (msg: string) => void = null;
 
-    constructor(onUpdateView: (msg: string) => void, onUpdateActivePlayerList: (playerList: string[]) => void) {
+    constructor(
+        eventBus: EventBus,
+        onUpdateView: (msg: string) => void,
+        onUpdateActivePlayerList: (playerList: string[]) => void,
+    ) {
+        this._eventBus = eventBus;
         this._onUpdateActivePlayerList = onUpdateActivePlayerList;
         this._onUpdateView = onUpdateView;
 
@@ -73,6 +81,7 @@ export default class SocketService {
     }
 
     private _onOpen(msg: string): void {
+        this._eventBus.trigger('ConnectionOpen');
         console.log('@@@ - onOpen', msg);
 
         this.send(JSON.stringify({
@@ -82,10 +91,12 @@ export default class SocketService {
     }
 
     private _onError(msg: string): void {
+        this._eventBus.trigger('Error', `${JSON.stringify(msg)}`);
         console.log('@@@ - onError', `${JSON.stringify(msg)}`);
     }
 
     private _onMessage(msg: MessageEvent): void {
+        this._eventBus.trigger('Message', `${JSON.stringify(msg)}`);
         console.log('@@@ - onMessage', `${JSON.stringify(msg)}`);
 
         const messageToSend = {
@@ -103,10 +114,12 @@ export default class SocketService {
             switch (msgData.type) {
                 case ActionType.NewConnection:
                     this._onUpdateActivePlayerList(msgData.payload);
+                    this._eventBus.trigger('UpdatePlayerList', msgData.payload);
 
                     break;
                 case ActionType.ClosedConnection:
                     this._onUpdateActivePlayerList(msgData.payload);
+                    this._eventBus.trigger('UpdatePlayerList', msgData.payload);
 
                     break;
                 default:
