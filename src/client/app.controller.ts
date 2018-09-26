@@ -1,10 +1,10 @@
 import EventBus from '../shared/event-bus/event-bus';
-import SocketService from './socket.service';
+// import SocketService from './socket.service';
 import PlayerListViewController from './playerList/player-list-view.controller';
 import StageViewController from './stage/stage-view.controller';
 
 export default class AppController {
-    public socketService: SocketService = null;
+    // public socketService: SocketService = null;
 
     protected eventBus: EventBus = null;
     // FIXME: move below handlers to EventBus
@@ -28,7 +28,7 @@ export default class AppController {
 
     constructor() {
         this.eventBus = new EventBus();
-        this.socketService = new SocketService(this.eventBus, this.onUpdateViewHandler, this.onUpdatePlayerListHandler);
+        // this.socketService = new SocketService(this.eventBus, this.onUpdateViewHandler, this.onUpdatePlayerListHandler);
 
         return this._init()
             ._createChildren()
@@ -87,7 +87,7 @@ export default class AppController {
             return this;
         }
 
-        this.socketService.setupConnection(this.playerId);
+        // this.socketService.setupConnection(this.playerId);
         this.eventBus.on('Message', this.onUpdateViewHandler);
         this.eventBus.on('UpdatePlayerList', this.onUpdatePlayerListHandler);
         this._sendBtnElement.addEventListener('click', this._onClickSendHandler);
@@ -97,7 +97,8 @@ export default class AppController {
 
     private _onClickSend(event: UIEvent): void {
         const msg = JSON.stringify({ player: this.playerId, gameId: 1, initialPosition: [4, 4], nextPosition: [4, 3] });
+        console.log('._onClickSend()', msg);
 
-        this.socketService.send(msg);
+        // this.socketService.send(msg);
     }
 }
