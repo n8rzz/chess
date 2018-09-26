@@ -16,4 +16,9 @@ html
 
             block content
 
+    script(src='/socket.io/socket.io.js')
     script(src='/script/bundle.js')
+    script.
+        var socket = io();
+        console.log('+++', socket);
+

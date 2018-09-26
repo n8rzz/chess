@@ -20,8 +20,8 @@ import {ProfileRouteController} from './profile/profile-route.controller';
 dotenv.config({ path: '.env' });
 
 const PORT_NUMBER: string | number = process.env.PORT || 8877;
-
 const app = express();
+const server = http.createServer(app);
 const MongoStore = mongo(session);
 const mongoUrl = process.env.MONGODB_URI;
 (mongoose as any).Promise = global.Promise;
@@ -96,8 +96,7 @@ app.get(RoutePathEnum.Root, [hasAuthMiddleware], (req: express.Request, res: exp
     res.redirect('lobby');
 });
 
-const server = http.createServer(app);
-const socketController: SocketController = new SocketController(server, sessionParser);
+const socketController: SocketController = new SocketController(server/*, sessionParser */);
 socketController.init();
 
 server.listen(PORT_NUMBER, () => {
